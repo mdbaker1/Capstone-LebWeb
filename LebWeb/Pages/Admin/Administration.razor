@@ -1,0 +1,123 @@
+﻿@page "/administration"
+@attribute [Authorize(Roles = "Administrator")]
+@using LebWeb.Models
+@using Microsoft.AspNetCore.Identity;
+@using System.Security.Claims;
+@using LebWeb.Helpers
+
+<h1 class="float-start"><span class="fw-bold">Administration</span></h1>
+
+<AuthorizeView Roles="Administrator">
+    <Authorized>
+        <button class="float-end btn btn-success" @onclick="AddNewUser">
+            Create New User
+        </button>
+        <br />
+        <br />
+        @if (@context.User.IsInRole(ADMINISTRATION_ROLE))
+        {
+            <table class="table table-responsive">
+                <thead>
+                    <tr>
+                        @*<th>Id</th>*@
+                        <th>User Name</th>
+                        <th>Display Name</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var user in ColUsers)
+                    {
+                        <tr>
+                            @*<td>@user.Id.Substring(0,5) ...</td>*@
+                            <td>@user.UserName</td>
+                            <td>@StringUtilities.CustomToUpper(@user.LastName), @StringUtilities.CustomToUpper(@user.FirstName)</td>
+                            <td>@user.Email</td>
+                            <td>
+                                <!-- Edit the current user-->
+                        <button class="btn btn-primary" @onclick="(() => EditUser(user))">
+                                    Edit
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (ShowPopup)
+            {
+                <div class="modal" tabindex="-1" style="display:block; background-color:black;" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3 class="modal-title">@modalHeader</h3>
+                            </div>
+                            <!-- Edit form for the current user -->
+                    <div class="modal-body">
+
+                                <!-- Only show Id if not a new user -->
+                                @if (objUser.Id != "")
+                                {
+                                    <p>@objUser.Id</p>
+                                }
+
+                                @*<label><strong>Username</strong></label>
+                                    <input class="form-control" type="text" @bind="objUser.UserName" disabled />*@
+                                <label><strong>Email</strong></label>
+                                <input class="form-control" type="text" @bind="objUser.Email" required />
+                                <label><strong>First Name</strong></label>
+                                <input class="form-control" type="text" @bind="objUser.FirstName" required />
+                                <label><strong>Last Name</strong></label>
+                                <input class="form-control" type="text" @bind="objUser.LastName" required />
+                                <label><strong>Password</strong></label>
+                                <input class="form-control" type="password" @bind="objUser.PasswordHash" />
+                                <label><strong>Role</strong></label>
+                                <select class="form-control" @bind="@CurrentUserRole">
+                                    @foreach (var option in Options)
+                                    {
+                                        <option value="@option">
+                                            @option
+                                        </option>
+                                    }
+                                </select>
+                                <br /><br />
+                                <!-- Button to save the user -->
+                        <button class="btn btn-primary" @onclick="SaveUser">
+                                    Save
+                                </button>
+                                <!-- Only show delete button if not a new record -->
+                                @if (objUser.Id != "")
+                                {
+                                    <!-- Button to delete the forecast -->
+                                    <button class="btn btn-danger mx-1" @onclick="DeleteUser">
+                                        Delete
+                                    </button>
+                                }
+                                <button class="btn btn-secondary mx-1" @onclick="ClosePopup">
+                                    Cancel
+                                </button>
+                                <br />
+                                <span style="color:red">@strError</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @*<button class="btn btn-success" @onclick="AddNewUser">Add User</button>*@
+        }
+        else
+        {
+            <p>You're not signed is as a user in @ADMINISTRATION_ROLE.</p>
+        }
+    </Authorized>
+    <NotAuthorized>
+        @*<p>You're not logged in.</p>*@
+        <p>You're not signed is as a user in @ADMINISTRATION_ROLE role.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+
+}

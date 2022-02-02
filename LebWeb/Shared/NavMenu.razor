@@ -1,0 +1,189 @@
+﻿@using LebWeb.Models
+@using Microsoft.AspNetCore.Identity
+@using System.Globalization
+
+@inject NavigationManager _navManager
+@inject UserManager<ApplicationUser> _userManager
+@*@inject SignInManager<ApplicationUser> _signInManager*@
+@inject AuthenticationStateProvider _authenticationStateProvider
+
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="">LebWeb</a>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <AuthorizeView>
+            <NotAuthorized>
+                <div class="nav-item px-3 py-1">
+                    <NavLink class="nav-link" href="register">
+                        <span class="oi oi-list" aria-hidden="true"></span> Register
+                    </NavLink>
+                </div>
+
+                <div class="nav-item px-3 py-1">
+                    <NavLink class="nav-link" href="login">
+                        <span class="oi oi-account-login" aria-hidden="true"></span> Log In
+                    </NavLink>
+                </div>
+            </NotAuthorized>
+            <Authorized>
+                <div class="nav-item px-1 py-0">
+                    <NavLink class="nav-link" href="profile" @onclick:preventDefault>
+                        Hello, @UserName
+                    </NavLink>
+                </div>
+
+                <hr class="pb-1 pt-0 my-0" style="color: whitesmoke" />
+
+                <div class="nav-item px-3 py-1">
+                    <NavLink class="nav-link" href="digitaldisplay">
+                        <span class="oi oi-browser" aria-hidden="true"></span> Digital Display
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3 py-1">
+                    <NavLink class="nav-link" href="top100">
+                        <span class="oi far fa-star" aria-hidden="true"></span> Top 100
+                    </NavLink>
+                </div>
+
+            </Authorized>
+        </AuthorizeView>
+        <AuthorizeView Roles="Administrator">
+            <Authorized>
+
+                <hr class="pt-0 mt-0" style="color:white" />
+                <span class="text-center" style="color: whitesmoke">&nbsp;System Admin</span>
+
+                <div class="nav-item px-3 pt-0 pb-0">
+                    <NavLink class="nav-link" href="administration">
+                        <i class="fas fa-user" aria-hidden="true"></i>
+                        &nbsp;&nbsp;Users
+                    </NavLink>
+                </div>
+
+                <div class="nav-item px-3 pt-1 pb-0 @EmployeeSubMenuCssClass">
+                    <NavLink class="nav-link" @onclick="ToggleEmployeeSubMenu">
+                        @if (expandEmployeeSubNav)
+                        {
+                            <i class="fas fa-minus" aria-hidden="true"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-plus" aria-hidden="true"></i>
+                        }
+                        &nbsp;&nbsp;Employees
+                    </NavLink>
+                    @if (expandEmployeeSubNav)
+                    {
+                        <NavLink class="expand-menu dropdown-item nav-link" href="employees/active">
+                            <i class="fas fa-door-open ms-3"></i>&nbsp;&nbsp;Active
+                        </NavLink>
+                        <NavLink class="expand-menu dropdown-item" href="employees/inactive">
+                            <i class="fas fa-door-closed ms-3"></i>&nbsp;&nbsp;In-Active
+                        </NavLink>
+                    }
+                </div>
+
+                <hr class="pt-0 mt-0" style="color:white" />
+                <span class="text-center" style="color: whitesmoke">&nbsp;Reports</span>
+                <div class="nav-item px-3 pt-0 pb-0 @BonusHourSubMenuCssClass">
+                    <NavLink class="nav-link" @onclick="ToggleBonusHourSubMenu">
+                        @if (expandBonusHourSubNav)
+                        {
+                            <i class="fas fa-minus" aria-hidden="true"></i>
+                        }
+                        else
+                        {
+                            <i class="fas fa-plus" aria-hidden="true"></i>
+                        }
+                        &nbsp;&nbsp;Bonus Hours
+                    </NavLink>
+                    @if (expandBonusHourSubNav)
+                    {
+                        <NavLink class="expand-menu dropdown-item nav-link" href="employees/bonushours5">
+                            &nbsp;&nbsp;&nbsp;&nbsp;5-7 Years
+                        </NavLink>
+                        <NavLink class="expand-menu dropdown-item" href="employees/bonushours8">
+                           &nbsp;&nbsp;&nbsp;&nbsp;8+ Years
+                        </NavLink>
+                    }
+                </div>
+
+                <div class="nav-item px-3 pt-0 pb-0">
+                    <NavLink class="nav-link" href="top100list">
+                        <i class="fas fa-star" aria-hidden="true"></i>
+                        &nbsp;&nbsp;Top100
+                    </NavLink>
+                </div>
+
+            </Authorized>
+        </AuthorizeView>
+        <AuthorizeView>
+            <Authorized>
+                <hr class="py-0 my-1" style="color:white" />
+                <div class="nav-item px-3 pb-0">
+                    <NavLink class="nav-link" href="logout">
+                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                        &nbsp;&nbsp;Log Out
+                    </NavLink>
+                </div>
+            </Authorized>
+        </AuthorizeView>
+    </nav>
+</div>
+
+@code {
+    private bool expandEmployeeSubNav = false;
+    private string? EmployeeSubMenuCssClass => expandEmployeeSubNav ? "collapse" : null;
+    private void ToggleEmployeeSubMenu()
+    {
+        expandEmployeeSubNav = !expandEmployeeSubNav;
+    }
+
+    private bool expandBonusHourSubNav = false;
+    private string? BonusHourSubMenuCssClass => expandBonusHourSubNav ? "collapse" : null;
+    private void ToggleBonusHourSubMenu()
+    {
+        expandBonusHourSubNav = !expandBonusHourSubNav;
+    }
+
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    private void OnIntializedAsync()
+    {
+
+    }
+
+    private string? UserName { get; set; }
+    private bool isLoggedIn = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            isLoggedIn = true;
+            var currentUser = await _userManager.FindByNameAsync(user.Identity.Name);
+            //UserName = $"{CultureInfo.CurrentCulture.TextInfo.ToTitleCase(currentUser.FirstName.ToLower())} " +
+            //            $"{CultureInfo.CurrentCulture.TextInfo.ToTitleCase(currentUser.LastName.ToLower())}";
+            //            //$"{ username.LastName.Substring(0,1).ToUpper() }";
+            UserName = $"{StringUtilities.CustomToUpper(currentUser.FirstName)}" +
+                        $" {StringUtilities.CustomToUpper(currentUser.LastName)}";
+        }
+    }
+}

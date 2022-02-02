@@ -1,0 +1,94 @@
+﻿@page "/employees/active"
+@attribute [Authorize]
+@inject NavigationManager _navManager
+
+<h1 class="float-start"><span class="fw-bold">Employees (Active)</span></h1>
+
+<AuthorizeView Roles="Administrator">
+    <button class="float-end btn btn-success" @onclick="(() => UpdateEmployee(0))">
+        Create New Employee
+    </button>
+</AuthorizeView>
+<br />
+<br />
+<br />
+<br />
+
+<div class="form-row text-left">
+    <div class="form-group col-md-6">
+        <label for="search">Search Employees (data will filter as you type)</label>
+        <input type="text" class="form-control" id="search" name="search" autofocus>
+    </div>
+</div>
+
+<hr>
+
+
+@if (employees == null)
+{
+    <h4>
+        <span>
+            <i class="fa fa-spinner fa-pulse fa-x fa-fw"></i>&nbsp;&nbsp; Loading Employees...
+        </span>
+    </h4>
+}
+else
+{
+    <div class="row">
+        <table class="table table-hover table-sm table-responsive" id="employeesTable">
+            <thead>
+                <tr>
+                    <th class="col-1">Id</th>
+                    <th class=""></th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Hire Date</th>
+                    @*<th>Term Date</th>*@
+                    @*<th>Active</th>*@
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in employees)
+                {
+                    <tr class="align-middle" @ondblclick="(() => UpdateEmployee(e.Id))">
+                        <td>@e.Id</td>
+                        @if (e.PhotoLink == null || e.PhotoLink == "")
+                        {
+                            <td><img src="/uploads/Avatar.jpg" class="border border-danger rounded-3" style="height:75px; width:50px;"></td>
+                        }
+                        else
+                        {
+                            <td><img src="@e.PhotoLink" class="rounded-3" style="height:75px; width:50px;"></td>
+                        }
+
+                        <td>@StringUtilities.CustomToUpper(@e.FirstName)</td>
+                        <td>@StringUtilities.CustomToUpper(@e.LastName)</td>
+                        <td>@e.HireDate.Date.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            <a @onclick="(() => UpdateEmployee(e.Id))">
+                                <span class="oi oi-pencil p-2 rounded-2 btn-warning" />
+                            </a>
+                            <a type="button" class="me-lg-0 ms-lg-2" @onclick="(() => OnDeleteEmployee(e.Id, e.FirstName, e.LastName))">
+                                <span class="btn-danger  p-2  rounded-2 oi oi-trash"></span>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+<hr />
+<footer class="footer border-top pl-3 text-muted">
+    <div class="container">
+        &copy; 2021 - LebWeb
+    </div>
+</footer>
+@if (showEditForm)
+{
+    @if (showEditForm)
+    {
+        <AddEdit_Employee Id="@idToUpdate" OnCancelledUpdate="OnCancelledUpdate" OnUpdate="HandleOnUpdate"></AddEdit_Employee>
+    }
+}

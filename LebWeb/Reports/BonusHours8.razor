@@ -1,0 +1,51 @@
+﻿@page "/employees/bonushours8"
+@attribute [Authorize(Roles="Administrator")]
+
+<h1><span class="fw-bold">8+ Year Bonus Hours</span></h1>
+<h3>(For Previous Quarter)</h3>
+<br />
+
+<hr>
+
+@if (employees == null)
+{
+    <h4>
+        <span>
+            <i class="fa fa-spinner fa-pulse fa-x fa-fw"></i>&nbsp;&nbsp; Loading Employees...
+        </span>
+    </h4>
+}
+else
+{
+    <div class="row">
+        <table class="table table-hover table-sm table-responsive" id="employeesTable">
+            <thead>
+                <tr>
+                    <th class="col-1">Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Hire Date</th>
+                    <th>Earned Hours</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var e in employees)
+                {
+                    <tr class="align-middle">
+                        <td>@e.Id</td>
+                        <td>@StringUtilities.CustomToUpper(@e.FirstName)</td>
+                        <td>@StringUtilities.CustomToUpper(@e.LastName)</td>
+                        <td>@e.HireDate.Date.ToString("yyyy-MM-dd")</td>
+                        <td>5</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+<hr />
+<footer class="footer border-top pl-3 text-muted">
+    <div class="container">
+        &copy; 2021 - LebWeb
+    </div>
+</footer>

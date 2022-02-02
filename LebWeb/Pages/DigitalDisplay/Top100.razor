@@ -1,0 +1,105 @@
+﻿@page "/top100"
+@using LebWeb.wwwroot
+@layout EmptyLayout
+@inject IEmployeeDataService _employeeData
+
+@if (employees != null)
+{
+    <div class="row">
+        <div class="col1 history">
+            <div class="row justify-content-center">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="digital_display_images/history1.jpg" class="card-img-top" alt="...">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <img src="digital_display_images/history8.jpg" class="card-img-top" alt="...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col2 history">
+            <div class="row justify-content-center">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="digital_display_images/history5.jpg" class="card-img-top" alt="...">
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="digital_display_images/history6.jpg" class="card-img-top" alt="...">
+                    <div class="card-body">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <img src="/digital_display_images/history4.jpg" class="card-img-top" alt="...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col3 mt-5">
+            <p class="col3-header">Top 100</p>
+            @foreach (var employee in employees)
+            {
+                @if (employee.PhotoLink != null)
+                {
+                    <div class="employee">
+                        <img src="@employee.PhotoLink" class="eeimage" alt="Employee Photo">
+                        <p class="empName">
+                            @StringUtilities.CustomToUpper(employee.FirstName)
+                            @StringUtilities.CustomToUpper(employee.LastName)
+                            <br />
+                            <span style='color:silver;'>@employee.HireDate.ToShortDateString()</span></p>
+                    </div>
+                }
+            }
+
+        </div>
+        <div class="col4 history">
+            <div class="row justify-content-center">
+                <div class="card">
+                    <img src="/digital_display_images/history9.jpg" class="card-img-top" alt="...">
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <img src="/digital_display_images/history10.jpg" class="card-img-top" alt="...">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col5 history">
+            <div class="row justify-content-center">
+                <div class="card">
+                    <div class="card-body">
+                        <img src="/digital_display_images/history2.jpg" class="card-img-top" alt="...">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <img src="/digital_display_images/history11.jpg" class="card-img-top" alt="...">
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <img src="/digital_display_images/history7.jpg" class="card-img-top" alt="...">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@code {
+    private List<IEmployeeModel> employees;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        employees = (await _employeeData.GetTop100())
+            .OrderBy(x => x.HireDate)
+            .ThenBy(x => x.LastName)
+            .ThenBy(x => x.FirstName).ToList();
+    }
+}

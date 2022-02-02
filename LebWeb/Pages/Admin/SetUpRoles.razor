@@ -1,0 +1,37 @@
+﻿@page "/setuproles"
+@using Microsoft.AspNetCore.Identity
+@using LebWeb.Models
+@inject RoleManager<IdentityRole> _roleManager
+@inject UserManager<ApplicationUser> _userManager
+@inject IConfiguration _config
+
+<h3>SetUpRoles</h3>
+
+<p>
+    This page has now set up the roles and marked the appropriate user as an administrator.
+</p>
+
+@code {
+    protected override async Task OnParametersSetAsync()
+    {
+        await SetUpAuth();
+    }
+
+    private async Task SetUpAuth()
+    {
+        const string administrator = "Administrator";
+        string[] roles = { administrator, "User" };
+        
+        foreach (var role in roles)
+        {
+            var roleExist = await _roleManager.RoleExistsAsync(role);
+            await _roleManager.CreateAsync(new IdentityRole(role));
+        }
+
+        var user = await _userManager.FindByEmailAsync(_config.GetValue <string>("AdminUser"));
+        if(user != null)
+        {
+            await _userManager.AddToRoleAsync(user, administrator);
+        }
+    }   
+}

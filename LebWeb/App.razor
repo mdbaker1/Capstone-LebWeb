@@ -1,0 +1,23 @@
+﻿<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <h1 class="text-danger fw-bold text-capitalize">oops, you don't have access!</h1>
+                    <p style="text-indent: 15px;">The page or component you are trying to get to requires 
+                        that you have more permissions than you currently do. Please either log in as an 
+                        Administrator or request additional permissions from your Administrator.
+                    </p>
+                </NotAuthorized>
+            </AuthorizeRouteView>
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <h1>Uh Oh! Something Broke!</h1>
+                <p role="alert">There was an issue loading this page. Please contact your local IT Dept.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

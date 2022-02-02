@@ -1,0 +1,121 @@
+﻿/* reset all margins to nothing */
+html, body, div, img, p, marquee {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+/* add background-color to overall display and margin-top to help center horizontally */
+body {
+    background-color: black;
+}
+/* create class for nametag positioning and styling */
+.empName {
+    font-size: 18px;
+    color: gold;
+    width: 98%;
+    border-radius: 15px;
+    background-color: black;
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+    margin-left: 1px;
+}
+/* adjust div's to display side by side */
+div.employee {
+    position: relative;
+    display: inline-block;
+}
+
+/* align p containers */
+p {
+    vertical-align: top;
+}
+
+/* class to float objects to left */
+.float-left {
+    float: left;
+}
+/* class to float objects to right */
+.float-right {
+    float: right;
+}
+/* class to add margin to images to assist with centering on each monitor */
+.employee {
+    /* for up to 960 images */
+    margin-left: 10px;
+    margin-bottom: 50px;
+}
+
+.eeimage{
+    height:300px;
+    width: 200px;
+}
+/* outside columns */
+.col1 {
+    /*background: red;*/
+    padding-top: 200px;
+    width: 1070px;
+    !important height: 2160px;
+    !important display: inline-block;
+}
+
+.col2 {
+    /* background: blue;*/
+    width: 1070px;
+    !important height: 2160px;
+    !important display:inline-block;
+}
+
+.col3 {
+    background: black;
+    width: 5350px;
+    height: 2160px;
+    display: inline-block;
+    vertical-align: top;
+    /*margin-left:25px;*/
+    /*margin-top: 400px;*/
+}
+
+.col3-header {
+    height: 350px;
+    color: gold;
+    font-size: 200px;
+    text-align: center;
+    padding-top: 50px;
+    padding-bottom: 250px;
+    font-weight: bold;
+}
+
+.col4 {
+    /*background: blue;*/
+    width: 1070px;
+    !important height: 2160px;
+    !important display: inline-block;
+}
+
+.col5 {
+    /*background: red;*/
+    width: 1070px;
+    !important height: 2160px;
+    !important display:inline-block;
+}
+
+.card {
+    margin-top: 50px; /* Added */
+    margin-left: 10px;
+    margin-right: 0;
+    float: none; /* Added */
+    margin-bottom: 200px; /* Added */
+    width: 60%;
+    height: auto;
+}
+
+.history {
+    display: none;
+}
+
+@media screen and (min-width: 5000px) {
+    .history {
+        display: block;
+    }
+}

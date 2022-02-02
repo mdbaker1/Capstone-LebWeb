@@ -1,0 +1,72 @@
+﻿@page "/top100list"
+@attribute [Authorize(Roles="Administrator")]
+@inject IEmployeeDataService _employeeData
+
+<h1><span class="fw-bold">Top 100 Senior Employees</span></h1>
+<br />
+
+<hr>
+
+@if (employees == null)
+{
+    <h4>
+        <span>
+            <i class="fa fa-spinner fa-pulse fa-x fa-fw"></i>&nbsp;&nbsp; Loading Employees...
+        </span>
+    </h4>
+}
+else
+{
+
+    <div class="row">
+        <table class="table table-hover table-sm table-responsive" id="employeesTable">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Hire Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{var c = 1;}
+                @foreach (var e in employees)
+                {
+                    <tr class="align-middle">
+                           <td>@c</td> 
+                           <td>@e.Id</td>
+                            <td>@StringUtilities.CustomToUpper(@e.FirstName)</td>
+                            <td>@StringUtilities.CustomToUpper(@e.LastName)</td>
+                            <td>@e.HireDate.Date.ToString("yyyy-MM-dd")</td>
+                    </tr>
+                    c++;
+                }
+            </tbody>
+        </table>
+    </div>
+}
+<hr />
+<footer class="footer border-top pl-3 text-muted">
+    <div class="container">
+        &copy; 2021 - LebWeb
+    </div>
+</footer>
+
+@code {
+    private List<IEmployeeModel> employees;
+    private int counter = 1;
+
+    private void IncrementCount()
+    {
+        counter = counter + 1;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        employees = (await _employeeData.GetTop100())
+            .OrderBy(x => x.HireDate)
+            .ThenBy(x => x.LastName)
+            .ThenBy(x => x.FirstName).ToList();
+    }
+}

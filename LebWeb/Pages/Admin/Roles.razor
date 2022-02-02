@@ -1,0 +1,55 @@
+﻿@page "/admin/roles"
+
+@using Microsoft.AspNetCore.Identity
+@using LebWeb.Models
+
+<h3>Roles</h3>
+<div class="row">
+    <div class="col-12">
+        <label>New Role</label>
+        <input value="@RoleToAdd" @onchange="@((ChangeEventArgs __e) => RoleToAdd =__e.Value.ToString())" />
+        <a @onclick="AddRole" class="btn btn-primary">Add Role</a>
+    </div>
+</div>
+<br />
+<div>
+    <table class="table table-responsive">
+        <thead>
+            <tr>
+                <th class="col-8">Role Name</th>
+                <th class="col-4"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var role in AllRoles)
+            {
+                <tr>
+                    <td>@role.Name</td>
+                    @if (IsAdmin)
+                    {
+                        <td>
+                            <!-- Edit the current user-->
+                    <button class="btn btn-primary" @*@onclick="(() => EditUser(user))" *@>
+                                Edit
+                            </button>
+                            <button class="btn btn-danger" @*@onclick="(() => EditUser(user))" *@>
+                                Delete
+                            </button>
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<br />
+
+
+@code {
+
+}

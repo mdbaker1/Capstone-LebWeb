@@ -1,0 +1,68 @@
+﻿@layout DigitalDisplayLayout
+@page "/digitaldisplay"
+@using LebWeb.wwwroot
+
+@inject IEmployeeDataService _employeeData
+@inject IJSRuntime _js
+
+<div class="welcome history">
+    <img src="digital_display_images/Plant.jpg" class="float-left headerImages" />
+    Welcome To EMERSON Lebanon MO!
+    <img src="digital_display_images/Plant1.png" class="float-right headerImages" />
+</div>
+<div id="main">
+    @if (employees != null)
+    {
+        @foreach (var employee in employees)
+        {
+            @if (employee.PhotoLink != null)
+            {
+                <div class="employee">
+                    <img src="@employee.PhotoLink" alt="Employee Photo">
+                    <AuthorizeView Context="firstname">
+                        <p class="empName">
+                            @StringUtilities.CustomToUpper(@employee.FirstName)
+                            <AuthorizeView Roles="Administrator">
+                                @StringUtilities.CustomToUpper(@employee.LastName)
+                            </AuthorizeView>
+                        </p>
+                    </AuthorizeView>
+                </div>
+            }
+            else if (employee.PhotoLink == null)
+            {
+                <div class="employee">
+                    <img src="/uploads/Avatar.jpg">
+                    <p class="empName">@StringUtilities.CustomToUpper(@employee.FirstName) @StringUtilities.CustomToUpper(@employee.LastName)</p>
+                </div>
+            }
+        }
+    }
+    else
+    {
+        <p>Loading Photos...</p>
+    }
+</div>
+<p class="history"><img src="digital_display_images/emerson-logo.png" class="float-left images"><span style="font-size:137px;vertical-align:top;margin-top:0;">&nbsp;&nbsp;&nbsp;<span style="color:royalblue;">Integrity&nbsp;&nbsp;&nbsp;|</span>&nbsp;&nbsp;&nbsp;<span style="color:orange;">Safety & Quality&nbsp;&nbsp;&nbsp;|</span>&nbsp;&nbsp;&nbsp;<span style="color:blueviolet;">Support Our People&nbsp;&nbsp;&nbsp;|</span>&nbsp;&nbsp;&nbsp;<span style="color:darkmagenta;">Customer Focus&nbsp;&nbsp;&nbsp;|</span>&nbsp;&nbsp;&nbsp;<span style="color:limegreen;">Continuous Improvement&nbsp;&nbsp;&nbsp;&nbsp;|</span>&nbsp;&nbsp;&nbsp;<span style="color:goldenrod;">Collaboration&nbsp;&nbsp;&nbsp;|</span>&nbsp;&nbsp;&nbsp;<span style="color:skyblue;">Innovation</span>&nbsp;&nbsp;&nbsp;</span><img src="digital_display_images/emerson-logo.png" class="float-right images"></p>
+@*<p class="history text-center"><marquee scrollamount="25" width="97%">Meet our most valuable assets! Thank You for being part of EMERSON!</marquee></p>
+*@
+@code {
+    private List<IEmployeeModel> employees;
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            employees = (await _employeeData.GetEmployees())
+            .OrderBy(x => x.LastName)
+            .ThenBy(x => x.FirstName)
+            .ThenBy(x => x.HireDate).ToList();
+
+            await _js.InvokeVoidAsync("GoToTop100");
+        }
+        catch(Exception ex)
+        {
+            await _js.InvokeVoidAsync("alert", ex.Message);
+        }
+    }
+}

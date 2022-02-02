@@ -1,0 +1,121 @@
+﻿/* reset all margins to nothing */
+html, body, div, img, p, marquee {
+    margin: 0;
+    border: 0;
+    padding: 0;
+}
+
+/* add background-color to overall display and margin-top to help center horizontally */
+body {
+    background-color: springgreen !important;
+}
+/* set fixed height for employee photos (all photos should be formatted as 300px by 200px, added border radius for styling */
+img {
+    height: 144px;
+    width: 96px;
+    /*height: 172px;*/
+    /*width: 114.7px;*/
+    border-radius: 5%;
+}
+/* set fixed height for other images (all images should be same height as photos, added border radius for styling */
+.images {
+    height: 144px;
+    /*height: 172px;*/
+    width: auto;
+    border-radius: 5%;
+}
+/* header image styling */
+.headerImages {
+    height: 295px;
+    width: auto;
+    border-radius: 0%;
+}
+/* create class for nametag positioning and styling */
+.empName {
+    font-size: 11px;
+    color: white;
+    width: 98%;
+    border-radius: 15px;
+    background-color: black;
+    position: absolute;
+    bottom: 10px;
+    text-align: center;
+    margin-left: 1px !important;
+}
+/* adjust div's to display side by side */
+div.employee {
+    position: relative;
+    display: inline-block;
+}
+/* position content inside of content management layout */
+#main {
+    margin-top: 7px;
+    margin-left: 5px;
+}
+
+/* scroll message  across display */
+marquee {
+    color: gold;
+    font-size: 150px;
+    margin-top: 0;
+    vertical-align: top;
+}
+
+/* align p containers */
+p {
+    vertical-align: top;
+}
+
+/* class to float objects to left */
+.float-left {
+    float: left;
+}
+/* class to float objects to right */
+.float-right {
+    float: right;
+}
+/* class to add margin to images to assist with centering on each monitor */
+.employee {
+    /* for up to 960 images */
+    /*margin-left: 1px;
+    margin-bottom: 3px;*/
+    /* for up to 1330 images */
+    margin-left: 0.9px;
+    margin-bottom: 6px;
+}
+    /* add wider margin at right side of each *n images to prevent overlap from at monitors left & rigth joints */
+    /*.employee:nth-of-type(16n) {
+		margin-right: 5px;
+	}*/
+
+    /* uncomment for up to 1330 images and comment out rule above */
+    /*.employee:nth-of-type(19n) {
+        margin-right: 2px;
+    }*/
+
+    /* clear margin at last image on each row (*n number of images) to keep rows centered */
+    /*.employee:nth-of-type(80n){
+		margin-right: 0;
+	}*/
+    /* uncomment for up to 1330 images and comment out rule above */
+    /*.employee:nth-of-type(95n) {
+        margin-right: 2px;
+    } */
+
+.welcome {
+    font-size: 265px;
+    color: darkblue;
+    //background-color: silver;
+    text-align: center;
+    text-shadow: 10px 5px 10px silver;
+}
+
+.history {
+    display: none;
+}
+
+@media screen and (min-width: 5000px) {
+    .history {
+        display: block;
+    }
+}
