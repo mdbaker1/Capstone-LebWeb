@@ -4,6 +4,9 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 appsettings.json
+wwwroot/EmployeeImages
+wwwroot/uploads
+wwwroot/digital_display_images
 
 # User-specific files
 *.rsuser
