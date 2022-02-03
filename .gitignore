@@ -4,9 +4,6 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 appsettings.json
-wwwroot/EmployeeImages/
-wwwroot/uploads/
-wwwroot/digital_display_images/
 
 # User-specific files
 *.rsuser
@@ -366,3 +363,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/LebWeb/wwwroot/uploads
+/LebWeb/wwwroot/EmployeeImages/
+/LebWeb/wwwroot/uploads/
+/LebWeb/wwwroot/digital_display_images/
