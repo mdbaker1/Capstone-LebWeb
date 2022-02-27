@@ -9,66 +9,46 @@ using Microsoft.JSInterop;
 
 namespace LebWeb.Pages.Admin
 {
-    
+
     public partial class Administration
     {
-        [Inject] 
-        UserManager<ApplicationUser> _userManager { get; set; }
-        
-        [Inject] 
-        RoleManager<IdentityRole> _roleManager { get; set; }
+        [Inject]
+        UserManager<ApplicationUser>? _userManager { get; set; }
+
+        /* [Inject] 
+         RoleManager<IdentityRole>? _roleManager { get; set; }*/
 
         [Inject]
         IJSRuntime _js { get; set; }
 
-
         [CascadingParameter]
         private Task<AuthenticationState>? authenticationStateTask { get; set; }
 
-        private readonly string ADMINISTRATION_ROLE = "Administrator";
+        private const string ADMINISTRATION_ROLE = "Administrator";
 
-        private ClaimsPrincipal? CurrentUser;
-
-        private ApplicationUser objUser = new ApplicationUser();
+        private ApplicationUser? objUser = new ApplicationUser();
 
 
-        private string CurrentUserRole { get; set; } = "User";
+        private string? CurrentUserRole { get; set; } = "User";
 
         private List<ApplicationUser> ColUsers = new List<ApplicationUser>();
 
         private List<string> Options = new List<string>()
-    {
-        "User", "Administrator"
-    };
+        {
+            "User", "Administrator"
+        };
 
-        string strError = "";
+        string? strError = null;
 
         private bool ShowPopup = false;
+        private bool IsEdit = false;
 
         private string? modalHeader;
 
-        protected override async Task OnInitializedAsync()
+        protected override async Task OnParametersSetAsync()
         {
             //await _js.InvokeVoidAsync("alert", "Hit Code Behind");
             await Task.Delay(1000);
-            var RoleResult = await _roleManager.FindByNameAsync(ADMINISTRATION_ROLE);
-            if (RoleResult == null)
-            {
-                await _roleManager.CreateAsync(new IdentityRole(ADMINISTRATION_ROLE));
-            }
-
-            var user = await _userManager.FindByNameAsync("michael.baker@emerson.com");
-            if (user != null)
-            {
-                var UserResult = await _userManager.IsInRoleAsync(user, ADMINISTRATION_ROLE);
-                if (!UserResult)
-                {
-                    await _userManager.AddToRoleAsync(user, ADMINISTRATION_ROLE);
-                }
-            }
-
-            CurrentUser = (await authenticationStateTask).User;
-
             await GetUsers();
         }
 
@@ -79,6 +59,7 @@ namespace LebWeb.Pages.Admin
             objUser.Id = "";
             ShowPopup = true;
             modalHeader = "Add User";
+            IsEdit = false;
         }
 
         protected async Task SaveUser()
@@ -225,6 +206,8 @@ namespace LebWeb.Pages.Admin
 
             // Set modal title to Edit User
             modalHeader = "Edit User";
+
+            IsEdit = true;
             // Get the user
             var user = await _userManager.FindByIdAsync(objUser.Id);
             if (user != null)
@@ -277,7 +260,7 @@ namespace LebWeb.Pages.Admin
             strError = "";
         }
 
-        protected async Task GetUsers()
+        protected Task GetUsers()
         {
             strError = "";
             ColUsers = new List<ApplicationUser>();
@@ -297,6 +280,8 @@ namespace LebWeb.Pages.Admin
             {
                 ColUsers.Add(item);
             }
+
+            return Task.CompletedTask;
         }
     }
 }

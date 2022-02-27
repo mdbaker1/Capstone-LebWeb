@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using SupportLibrary.Data;
 using SupportLibrary.Models;
+using Microsoft.Extensions.Logging;
 
 namespace LebWeb.Pages.Employee
 {
@@ -12,6 +13,9 @@ namespace LebWeb.Pages.Employee
         IEmployeeDataService _employeeData { get; set; }
         [Inject]
         IJSRuntime _js { get; set; }
+
+        [Inject]
+        ILogger<ActiveEmployees> _logger { get; set; }
 
         private List<IEmployeeModel> employees;
         private bool showEditForm = false;
@@ -70,16 +74,17 @@ namespace LebWeb.Pages.Employee
 
         protected override async Task OnParametersSetAsync()
         {
-
-            employees = (await _employeeData.GetAllActiveEmployees())
-            .OrderBy(x => x.LastName)
-            .ThenBy(x => x.FirstName)
-            .ThenBy(x => x.HireDate).ToList();
+            _logger.LogInformation("OnParametersSetAsync has been invoked");
+            
         }
 
         protected override async Task OnInitializedAsync()
         {
-
+            _logger.LogInformation("OnInitializedAsync has been invoked");
+            employees = (await _employeeData.GetAllActiveEmployees())
+            .OrderBy(x => x.LastName)
+            .ThenBy(x => x.FirstName)
+            .ThenBy(x => x.HireDate).ToList();
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -89,6 +94,7 @@ namespace LebWeb.Pages.Employee
                 if (firstRender)
                 {
                     await _js.InvokeVoidAsync("SearchTable");
+                    _logger.LogInformation("OnAfterRenderAsync has been invoked");
                 }
             }
             catch (Exception)

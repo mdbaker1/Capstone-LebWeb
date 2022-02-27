@@ -16,7 +16,10 @@ namespace LebWeb.Reports
 
         protected override async Task OnParametersSetAsync()
         {
-            employees = (await _employeeData.GetEmployeeBonusHours8()).ToList();
+            employees = (await _employeeData.GetEmployeeBonusHours8())
+                .OrderBy(x => x.LastName)
+                .ThenBy(x => x.FirstName)
+                .ThenBy(x => x.HireDate).ToList();
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)

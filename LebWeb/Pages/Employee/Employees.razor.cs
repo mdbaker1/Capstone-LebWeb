@@ -14,6 +14,9 @@ namespace LebWeb.Pages.Employee
         [Inject]
         IJSRuntime _js { get; set; }
 
+        [Inject]
+        ILogger<Employees> logger { get; set; }
+
         [Parameter]
         public bool Status { get; set; }
 
@@ -104,7 +107,7 @@ namespace LebWeb.Pages.Employee
 
         protected override async Task OnInitializedAsync()
         {
-            
+            logger.LogInformation("Page has been loaded");
         }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)

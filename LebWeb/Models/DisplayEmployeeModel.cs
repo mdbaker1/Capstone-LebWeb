@@ -26,16 +26,5 @@ namespace LebWeb.Models
 
         public bool IsActive { get; set; } = true;
 
-        private class FileValidationAttribute : ValidationAttribute
-        {
-            public FileValidationAttribute(string[] allowedExtensions)
-            {
-                AllowedExtensions = allowedExtensions;
-            }
-
-            private string[] AllowedExtensions { get; }
-
-        }
-
     }
 }

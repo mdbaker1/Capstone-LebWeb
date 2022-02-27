@@ -161,9 +161,6 @@ namespace LebWeb.Pages.Employee
 
         private async Task HandleValidSubmit()
         {
-            employee.FirstName = StringUtilities.CustomToLower(employee.FirstName);
-            employee.LastName = StringUtilities.CustomToLower(employee.LastName);
-
             if (IsEdit)
             {
                 if (employee.HireDate > employee.TermDate)
@@ -171,6 +168,10 @@ namespace LebWeb.Pages.Employee
                     ErrorMessage = "Employee Hire Date cannot be greater than Employee Term Date";
                     return;
                 }
+
+                employee.FirstName = StringUtilities.CustomToLower(employee.FirstName);
+                employee.LastName = StringUtilities.CustomToLower(employee.LastName);
+
                 await _employeeData.UpdateEmployee(employee);
 
                 if (OriginalEmployeeImage != null && OriginalEmployeeImage != employee.PhotoLink)
